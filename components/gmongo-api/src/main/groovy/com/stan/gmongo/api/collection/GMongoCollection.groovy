@@ -1,0 +1,37 @@
+package com.stan.gmongo.api.collection
+
+import groovy.lang.Closure;
+import groovy.transform.Canonical
+
+import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.CreateCollectionOptions
+
+trait GMongoCollection {
+	
+	abstract void insert(Closure document)
+	
+	abstract void insert(List documents)
+	
+	abstract GMongoIterable find(Closure filter, Closure projection)
+	
+	abstract GMongoIterable find(Closure filter)
+	
+	abstract GMongoIterable find()
+	
+	abstract Long count(Closure filter)
+	
+	abstract Long count()
+	
+	abstract void drop()
+	
+	abstract DeletedResult remove()
+	
+	abstract DeletedResult remove(Closure closure)
+	
+	abstract DeletedResult remove(Closure closure, boolean justOne)
+	
+	abstract def findOne(Closure filter)
+	
+	abstract def findOne(Closure filter, Closure projection)
+}

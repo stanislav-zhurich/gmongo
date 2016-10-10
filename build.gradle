@@ -1,0 +1,92 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'codenarc'
+//apply plugin: 'cobertura'
+
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		//classpath 'net.saliman:gradle-cobertura-plugin:2.2.4'
+		//classpath 'net.sourceforge.cobertura:cobertura:2.0.3'
+	}
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.4.6'
+}
+
+repositories {
+	jcenter()
+	mavenLocal()
+}
+
+
+/*cobertura {
+ coverageFormats = ['html']
+ coverageIgnoreTrivial = true
+ coverageIgnores = ['org.slf4j.Logger.*']
+ coverageReportDir = new File("$buildDir/reports/cobertura")
+ }*/
+
+//test.finalizedBy(project.tasks.cobertura)
+
+
+subprojects{
+	apply plugin: 'java'
+	apply plugin: 'groovy'
+	apply plugin: 'maven-publish'
+	dependencies {
+		compile 'org.codehaus.groovy:groovy-all:2.4.6'
+		testCompile 'junit:junit:4.12'
+		testCompile "org.spockframework:spock-core:$spock_version"
+		testCompile 'cglib:cglib-nodep:3.2.4'
+		//testCompile 'net.sourceforge.cobertura:cobertura:2.0.3'
+	}
+
+	repositories {
+		jcenter()
+		mavenLocal()
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) { from components.java }
+		}
+	}
+
+
+	sourceSets {
+		integrationTest  {
+			groovy {
+				compileClasspath += main.output + test.output
+				runtimeClasspath += main.output + test.output
+				srcDir file('src/integrationTest/groovy/')
+			}
+			resources.srcDir file('src/integrationTest/resources')
+		}
+	}
+	task integrationTest(type: Test) {
+
+		testClassesDir = sourceSets.integrationTest.output.classesDir
+		println testClassesDir
+		classpath = sourceSets.integrationTest.runtimeClasspath
+		println classpath
+		outputs.upToDateWhen { false }
+	}
+	
+	configurations {
+		integrationTestCompile.extendsFrom testCompile
+		integrationTestRuntime.extendsFrom testRuntime
+	}
+	check.dependsOn integrationTest
+	integrationTest.mustRunAfter test
+	
+	tasks.withType(Test) {
+		reports.html.destination = file("${reporting.baseDir}/${name}")
+	}
+
+}
