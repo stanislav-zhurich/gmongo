@@ -3,15 +3,13 @@ package com.stan.gmongo.impl.collection
 import java.util.concurrent.TimeUnit
 
 import com.mongodb.Block
-import com.mongodb.client.FindIterable
+import com.mongodb.client.MongoIterable
 import com.stan.gmongo.api.collection.GMongoIterable
-
-import groovy.lang.Closure;
 
 
 class GMongoIterableDefault implements GMongoIterable{
 	
-	private final FindIterable iterable
+	private final MongoIterable iterable
 	private final Map options = [:]
 	
 	GMongoIterableDefault(iterable){

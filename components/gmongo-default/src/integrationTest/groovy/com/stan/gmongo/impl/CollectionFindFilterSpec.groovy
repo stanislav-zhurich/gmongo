@@ -89,7 +89,7 @@ class CollectionFindFilterSpec extends AbstractCollectionSpec{
 			def list = []
 			result.into(list)
 		then:
-			list.size() == 1
+			list.size() == 2
 			list[0].get('person').get('name').getValue() == 'Ivan'
 	}
 	

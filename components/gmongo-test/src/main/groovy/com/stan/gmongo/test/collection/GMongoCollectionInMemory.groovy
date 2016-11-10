@@ -97,4 +97,10 @@ class GMongoCollectionInMemory implements GMongoCollection {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Object aggregate(List<Closure> pipeline) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

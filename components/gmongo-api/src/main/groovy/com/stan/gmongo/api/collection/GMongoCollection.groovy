@@ -3,6 +3,8 @@ package com.stan.gmongo.api.collection
 import groovy.lang.Closure;
 import groovy.transform.Canonical
 
+import java.util.List;
+
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.CreateCollectionOptions
@@ -34,4 +36,6 @@ trait GMongoCollection {
 	abstract def findOne(Closure filter)
 	
 	abstract def findOne(Closure filter, Closure projection)
+	
+	abstract def aggregate(List<Closure> pipeline)
 }

@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'codenarc'
+apply plugin: 'maven'
 //apply plugin: 'cobertura'
 
 buildscript {
@@ -25,14 +26,15 @@ repositories {
 }
 
 
-/*cobertura {
- coverageFormats = ['html']
- coverageIgnoreTrivial = true
- coverageIgnores = ['org.slf4j.Logger.*']
- coverageReportDir = new File("$buildDir/reports/cobertura")
- }*/
+ publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
 
-//test.finalizedBy(project.tasks.cobertura)
+             
+            }
+        }
+    }
 
 
 subprojects{
@@ -44,7 +46,6 @@ subprojects{
 		testCompile 'junit:junit:4.12'
 		testCompile "org.spockframework:spock-core:$spock_version"
 		testCompile 'cglib:cglib-nodep:3.2.4'
-		//testCompile 'net.sourceforge.cobertura:cobertura:2.0.3'
 	}
 
 	repositories {
@@ -52,6 +53,21 @@ subprojects{
 		mavenLocal()
 	}
 
+	 publishing {
+        repositories {
+            maven {
+                credentials {
+                    username 'admin'
+                    password 'admin123'
+                }   
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url 'http://192.168.33.10:8081/nexus/content/repositories/snapshots/'
+                } else {
+                    url 'http://192.168.33.10:8081/nexus/content/repositories/releases/'
+                }   
+            }   
+        }
+    }
 	publishing {
 		publications {
 			mavenJava(MavenPublication) { from components.java }
@@ -88,5 +104,6 @@ subprojects{
 	tasks.withType(Test) {
 		reports.html.destination = file("${reporting.baseDir}/${name}")
 	}
+	
 
 }

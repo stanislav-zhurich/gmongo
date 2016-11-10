@@ -24,7 +24,6 @@ abstract class AbstractCollectionSpec extends Specification{
 	
 	def setup(){
 		collection = db.createCollection('users')
-		println collection
 	}
 	
 	def cleanup(){
@@ -48,7 +47,7 @@ abstract class AbstractCollectionSpec extends Specification{
 					id 3
 					name 'Kate'
 					age 32
-					departments {name 'dep2'} {name 'dep3'}
+					departments {name 'dep1'} {name 'dep3'}
 					education {name 'Harvard'; year 2005} {name 'BSU'; year 2015}
 				}},
 				{ person {

@@ -1,6 +1,9 @@
 package com.stan.gmongo.impl.collection
 
+import groovy.lang.Closure;
 import groovy.util.logging.Slf4j
+
+import java.util.List;
 
 import org.bson.BsonDocument
 import org.bson.conversions.Bson
@@ -8,6 +11,7 @@ import org.bson.conversions.Bson
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.result.DeleteResult
+import com.stan.gmongo.api.collection.AggregationExecutor
 import com.stan.gmongo.api.collection.DeletedResult
 import com.stan.gmongo.api.collection.GMongoCollection
 import com.stan.gmongo.api.collection.GMongoIterable
@@ -19,7 +23,8 @@ class GMongoCollectionDefault implements GMongoCollection{
 	final String name
 	final MongoCollectionOptions options
 	final MongoCollection collection
-	final private Closure onDropCallback
+	final Closure onDropCallback
+	final AggregationExecutor aggegationExecutor
 	
 	GMongoCollectionDefault(MongoDatabase database, String name, Closure onDropCallback){
 		log.debug('Creating collection: $name')
@@ -34,6 +39,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 			database.createCollection(name)			
 		}
 		this.collection = database.getCollection(name, BsonDocument)
+		this.aggegationExecutor = new AggregationExecutorDefault(this.collection)
 	}
 
 	@Override
@@ -95,6 +101,11 @@ class GMongoCollectionDefault implements GMongoCollection{
 			result = collection.deleteMany(bsonFilter)
 		}
 		new DeletedResult(result.getDeletedCount())
+	}
+
+	@Override
+	def aggregate(List<Closure> pipeline) {
+		aggegationExecutor.aggregate(pipeline)
 	}
 	
 }
