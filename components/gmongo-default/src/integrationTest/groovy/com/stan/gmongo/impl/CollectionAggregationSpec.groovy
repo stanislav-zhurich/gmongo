@@ -120,5 +120,21 @@ class CollectionAggregationSpec extends AbstractCollectionSpec{
 			//def list = []
 			//result.forEach{ list << it }
 			println grad
-		}
+	}
+	
+	def "Document Reshaping"(){
+		given:
+			db.users.insert(persons())
+		when:
+			def result = db.users.aggregate(
+				[
+					
+					{'$match'  {'person.id' 1}},
+					{'$project' {'username' '$person.name'}}
+				
+				]
+			)
+		then:
+		  result.first().get('username').getValue() == 'Stan'
+	}
 }
