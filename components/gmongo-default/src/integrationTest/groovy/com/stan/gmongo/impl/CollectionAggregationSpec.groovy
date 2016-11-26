@@ -96,6 +96,8 @@ class CollectionAggregationSpec extends AbstractCollectionSpec{
 				]
 			)
 		then:
+			def l = []
+			result.into(l)
 			result.first().get('_id').getValue() == 'dep1'
 	}
 	

@@ -54,7 +54,7 @@ abstract class AbstractCollectionSpec extends Specification{
 					id 4
 					name 'Michael'
 					age 31
-					departments [{name 'dep4'}, {name 'dep3'}]
+					departments [{name 'dep4'}]
 					education [{name 'Harvard'; year 1999}, {name 'Yel'; year 2005}]
 				}}]
 	}
