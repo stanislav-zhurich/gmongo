@@ -22,6 +22,11 @@ class JsonDelegate {
 			return BsonNull.VALUE
 		}
 		switch (value.getClass()){
+			case ArrayList:
+				def array = value.collect{
+					convertToBsonValue(it)
+				}
+				return new BsonArray(array)
 			case String:
 				return new BsonString(value)
 			case Integer:
@@ -53,6 +58,11 @@ class JsonDelegate {
 			bsonValue = convertToBsonValue( args[0])
 		}
 		document.put(name, bsonValue)
+	}
+	
+	
+	def propertyMissing(String name){
+		new JsonArrayDelegate(this, name)
 	}
 	
 	Bson getBson(){

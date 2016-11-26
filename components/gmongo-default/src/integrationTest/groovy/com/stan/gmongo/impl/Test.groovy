@@ -1,10 +1,27 @@
 package com.stan.gmongo.impl
 
-def p = {person {
-					id 1
-					name 'Stan'
-					age 29
-					departments {name 'dep1'} {name 'dep2'}
-				}}
+import groovy.transform.InheritConstructors
+import groovy.transform.ToString
+import groovy.transform.TupleConstructor
 
-	println bson(p).toJson()
+
+def s = "test" as GroovyInterceptable
+//"".getAt()
+
+//s.getMetaClass().invokeMethod = {name, args -> println args.getClass()}
+//s.metaClass.getAt = {Range range -> println "hi"}
+
+//println s [1,2]
+
+
+
+def a = {
+			id 1
+			name 'Test'
+			departments [{id 4; name 'prod'}]
+						
+		}
+
+def b = bson(a)
+
+println b.toJson()

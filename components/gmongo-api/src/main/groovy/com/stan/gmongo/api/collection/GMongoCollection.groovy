@@ -38,4 +38,6 @@ trait GMongoCollection {
 	abstract def findOne(Closure filter, Closure projection)
 	
 	abstract def aggregate(List<Closure> pipeline)
+	
+	abstract WriteResult update(Closure query, Closure document, Closure options = {})
 }

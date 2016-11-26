@@ -1,9 +1,6 @@
 package com.stan.gmongo.impl.collection
 
-import groovy.lang.Closure;
 import groovy.util.logging.Slf4j
-
-import java.util.List;
 
 import org.bson.BsonDocument
 import org.bson.conversions.Bson
@@ -16,6 +13,8 @@ import com.stan.gmongo.api.collection.DeletedResult
 import com.stan.gmongo.api.collection.GMongoCollection
 import com.stan.gmongo.api.collection.GMongoIterable
 import com.stan.gmongo.api.collection.MongoCollectionOptions
+import com.stan.gmongo.api.collection.UpdateExecutor
+import com.stan.gmongo.api.collection.WriteResult
 
 @Slf4j
 class GMongoCollectionDefault implements GMongoCollection{
@@ -25,6 +24,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 	final MongoCollection collection
 	final Closure onDropCallback
 	final AggregationExecutor aggegationExecutor
+	final UpdateExecutor updateExecutor
 	
 	GMongoCollectionDefault(MongoDatabase database, String name, Closure onDropCallback){
 		log.debug('Creating collection: $name')
@@ -40,6 +40,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 		}
 		this.collection = database.getCollection(name, BsonDocument)
 		this.aggegationExecutor = new AggregationExecutorDefault(this.collection)
+		this.updateExecutor = new UpdateExecutorDefault(this.collection)
 	}
 
 	@Override
@@ -106,6 +107,11 @@ class GMongoCollectionDefault implements GMongoCollection{
 	@Override
 	def aggregate(List<Closure> pipeline) {
 		aggegationExecutor.aggregate(pipeline)
+	}
+
+	@Override
+	WriteResult update(Closure query, Closure document, @DelegatesTo(GMongoUpdateOptionsDefault) Closure options) {
+		updateExecutor.execute(query, document, options)
 	}
 	
 }

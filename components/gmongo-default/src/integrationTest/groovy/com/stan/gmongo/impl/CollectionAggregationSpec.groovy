@@ -136,5 +136,8 @@ class CollectionAggregationSpec extends AbstractCollectionSpec{
 			)
 		then:
 		  result.first().get('username').getValue() == 'Stan'
+
 	}
+	
+	
 }
