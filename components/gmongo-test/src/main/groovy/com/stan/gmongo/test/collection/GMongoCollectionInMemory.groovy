@@ -8,6 +8,7 @@ import com.stan.gmongo.api.collection.DeletedResult;
 import com.stan.gmongo.api.collection.GMongoCollection
 import com.stan.gmongo.api.collection.GMongoIterable;
 import com.stan.gmongo.api.collection.MongoCollectionOptions
+import com.stan.gmongo.api.collection.WriteResult;
 
 import groovy.lang.Closure;;
 
@@ -100,6 +101,18 @@ class GMongoCollectionInMemory implements GMongoCollection {
 
 	@Override
 	public Object aggregate(List<Closure> pipeline) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WriteResult update(Closure query, Closure document, Closure options) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WriteResult update(Closure query, Closure document) {
 		// TODO Auto-generated method stub
 		return null;
 	}
