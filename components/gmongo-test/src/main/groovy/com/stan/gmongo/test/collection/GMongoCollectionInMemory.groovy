@@ -116,4 +116,10 @@ class GMongoCollectionInMemory implements GMongoCollection {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Object findAndModify(Closure closure) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

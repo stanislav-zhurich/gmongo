@@ -78,7 +78,7 @@ class CollectionUpdateSpec extends AbstractCollectionSpec {
 			
 		}
 	
-	def "Chech Write Result"(){
+	def "Check Write Result"(){
 		given:
 			db.users.insert(persons())
 		when:
@@ -88,6 +88,8 @@ class CollectionUpdateSpec extends AbstractCollectionSpec {
 			writeResult.modified == 3 
 		
 	}
+	
+	
 	
 	def "Update Array Element"(){
 		given:
@@ -103,6 +105,22 @@ class CollectionUpdateSpec extends AbstractCollectionSpec {
 			def result = db.users.find({
 					'person.id' 4
 				}).first()
-			println result
+			result.get('person').getArray("departments").get(0).get("name").getValue() == 'test_department'
+	}
+	
+	def "Add Array Element"(){
+		given:
+			db.users.insert(persons())
+		when:
+		
+			db.users.update({
+					'person.id' 1
+				},
+				{'$push' {'person.departments' {name 'dep3'}}})
+		then:
+			def result = db.users.find({
+					'person.id' 1
+			}).first()
+			result.get('person').getArray("departments").size() == 3
 	}
 }

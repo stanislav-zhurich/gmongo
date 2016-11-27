@@ -40,4 +40,6 @@ trait GMongoCollection {
 	abstract def aggregate(List<Closure> pipeline)
 	
 	abstract WriteResult update(Closure query, Closure document, Closure options = {})
+	
+	abstract def findAndModify(@DelegatesTo(GMongoFindModifyOptions) Closure closure)
 }

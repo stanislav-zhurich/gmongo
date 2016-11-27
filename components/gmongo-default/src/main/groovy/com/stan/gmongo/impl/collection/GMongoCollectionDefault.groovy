@@ -10,6 +10,7 @@ import com.mongodb.client.MongoDatabase
 import com.mongodb.client.result.DeleteResult
 import com.stan.gmongo.api.collection.AggregationExecutor
 import com.stan.gmongo.api.collection.DeletedResult
+import com.stan.gmongo.api.collection.FindAndModifyExecutor
 import com.stan.gmongo.api.collection.GMongoCollection
 import com.stan.gmongo.api.collection.GMongoIterable
 import com.stan.gmongo.api.collection.MongoCollectionOptions
@@ -25,6 +26,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 	final Closure onDropCallback
 	final AggregationExecutor aggegationExecutor
 	final UpdateExecutor updateExecutor
+	final FindAndModifyExecutor findAndModifyExecutor
 	
 	GMongoCollectionDefault(MongoDatabase database, String name, Closure onDropCallback){
 		log.debug('Creating collection: $name')
@@ -41,6 +43,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 		this.collection = database.getCollection(name, BsonDocument)
 		this.aggegationExecutor = new AggregationExecutorDefault(this.collection)
 		this.updateExecutor = new UpdateExecutorDefault(this.collection)
+		this.findAndModifyExecutor = new FindAndModifyExecutorDefault(this.collection)
 	}
 
 	@Override
@@ -112,6 +115,16 @@ class GMongoCollectionDefault implements GMongoCollection{
 	@Override
 	WriteResult update(Closure query, Closure document, @DelegatesTo(GMongoUpdateOptionsDefault) Closure options) {
 		updateExecutor.execute(query, document, options)
+	}
+
+	@Override
+	WriteResult update(Closure query, Closure document) {
+		updateExecutor.execute(query, document, {})
+	}
+
+	@Override
+	def findAndModify(Closure closure) {
+		findAndModifyExecutor.execute(closure)
 	}
 	
 }
