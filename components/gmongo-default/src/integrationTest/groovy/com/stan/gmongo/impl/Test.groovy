@@ -1,27 +1,34 @@
 package com.stan.gmongo.impl
 
-import groovy.transform.InheritConstructors
-import groovy.transform.ToString
-import groovy.transform.TupleConstructor
 
 
-def s = "test" as GroovyInterceptable
-//"".getAt()
+class A {
+	
+	def prop = 5;
+	
+	def getProperty(String name){
+		println "get $name"
+		'test'
+	}
+	
+	def invokeMethod(String name, Object args){
+		println 'invoke'
+	}
+	
+	def methodMissing(String name, Object args){
+		println 'method missing'
+	}
+	
+	def test(){
+		println "in real test"
+	}
+	
 
-//s.getMetaClass().invokeMethod = {name, args -> println args.getClass()}
-//s.metaClass.getAt = {Range range -> println "hi"}
-
-//println s [1,2]
+}
 
 
-
-def a = {
-			id 1
-			name 'Test'
-			departments [{id 4; name 'prod'}]
-						
-		}
-
-def b = bson(a)
-
-println b.toJson()
+def a = new A()
+a.test()
+A.metaClass.test1 << {println delegate.getClass()}
+def a1 = new A()
+a1.test1()

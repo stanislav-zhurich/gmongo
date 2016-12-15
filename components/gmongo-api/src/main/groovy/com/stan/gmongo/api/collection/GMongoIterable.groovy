@@ -7,21 +7,11 @@ import org.bson.conversions.Bson;
 
 import com.mongodb.client.FindIterable;;
 
-trait GMongoIterable {
-
-	abstract <T> void forEach(@DelegatesTo(type="T") Closure<T> closure)
-	
-	abstract <T> GMongoIterable map(@DelegatesTo(type="T") Closure<T> closure)
-	
-	abstract <S> S first()
-	
-	abstract <T extends Collection> T into(T target);
+trait GMongoIterable implements GMongoBaseIterable{
 	
 	abstract GMongoIterable limit(Integer limit)
 	
 	abstract GMongoIterable skip(Integer skip)
-	
-	abstract GMongoIterable maxTime(long maxTime, TimeUnit timeUnit)
 	
 	abstract GMongoIterable modifiers(Closure closure)
 		

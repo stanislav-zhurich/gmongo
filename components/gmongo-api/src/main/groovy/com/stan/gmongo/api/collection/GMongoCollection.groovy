@@ -42,4 +42,10 @@ trait GMongoCollection {
 	abstract WriteResult update(Closure query, Closure document, Closure options = {})
 	
 	abstract def findAndModify(@DelegatesTo(GMongoFindModifyOptions) Closure closure)
+	
+	abstract def createIndex(Closure keys, Closure options = {})
+	
+	abstract def dropIndex(String drop)
+	
+	abstract def getIndexes()
 }

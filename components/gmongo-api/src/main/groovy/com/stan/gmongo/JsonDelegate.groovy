@@ -1,15 +1,21 @@
 package com.stan.gmongo
 
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 import org.bson.BsonArray
 import org.bson.BsonBoolean
+import org.bson.BsonDateTime
 import org.bson.BsonDocument
 import org.bson.BsonDouble
 import org.bson.BsonInt32
 import org.bson.BsonInt64
 import org.bson.BsonNull
+import org.bson.BsonObjectId
 import org.bson.BsonString
 import org.bson.BsonValue
 import org.bson.conversions.Bson
+import org.bson.types.ObjectId;
 
 class JsonDelegate {
 	
@@ -37,6 +43,12 @@ class JsonDelegate {
 				return new BsonDouble(value)
 			case Boolean:
 				return new BsonBoolean(value)
+			case LocalDateTime:
+				def timestamp = value.atZone(ZoneId.systemDefault())
+					.toInstant().toEpochMilli()
+				return new BsonDateTime(timestamp)
+			case ObjectId:
+				return new BsonObjectId(value)
 			case Closure:
 				return converter.toBson(value)
 		}

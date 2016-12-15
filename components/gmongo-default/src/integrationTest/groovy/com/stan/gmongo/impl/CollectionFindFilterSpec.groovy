@@ -69,7 +69,8 @@ class CollectionFindFilterSpec extends AbstractCollectionSpec{
 					id 1
 					name 'Stan'
 					age 29
-					departments {name 'dep1'} {name 'dep2'}
+					departments [{name 'dep1'}, {name 'dep2'}]
+					createdAt dateTime("2011-12-03T10:15:30")
 				}})
 			def list = []
 			result.into(list)

@@ -1,10 +1,11 @@
 package com.stan.gmongo.api.client
 
+import groovy.transform.Canonical;
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor;
 
 @TupleConstructor
-@ToString
+@Canonical
 class MongoServerAuthParams {
 
 	String username

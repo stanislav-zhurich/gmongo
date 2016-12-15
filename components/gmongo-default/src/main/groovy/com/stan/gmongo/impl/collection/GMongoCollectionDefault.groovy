@@ -13,6 +13,7 @@ import com.stan.gmongo.api.collection.DeletedResult
 import com.stan.gmongo.api.collection.FindAndModifyExecutor
 import com.stan.gmongo.api.collection.GMongoCollection
 import com.stan.gmongo.api.collection.GMongoIterable
+import com.stan.gmongo.api.collection.IndexExecutor
 import com.stan.gmongo.api.collection.MongoCollectionOptions
 import com.stan.gmongo.api.collection.UpdateExecutor
 import com.stan.gmongo.api.collection.WriteResult
@@ -27,6 +28,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 	final AggregationExecutor aggegationExecutor
 	final UpdateExecutor updateExecutor
 	final FindAndModifyExecutor findAndModifyExecutor
+	final IndexExecutor indexExecutor
 	
 	GMongoCollectionDefault(MongoDatabase database, String name, Closure onDropCallback){
 		log.debug('Creating collection: $name')
@@ -44,6 +46,7 @@ class GMongoCollectionDefault implements GMongoCollection{
 		this.aggegationExecutor = new AggregationExecutorDefault(this.collection)
 		this.updateExecutor = new UpdateExecutorDefault(this.collection)
 		this.findAndModifyExecutor = new FindAndModifyExecutorDefault(this.collection)
+		this.indexExecutor = new IndexExecutorDefault(this.collection)
 	}
 
 	@Override
@@ -125,6 +128,26 @@ class GMongoCollectionDefault implements GMongoCollection{
 	@Override
 	def findAndModify(Closure closure) {
 		findAndModifyExecutor.execute(closure)
+	}
+
+	@Override
+	def createIndex(Closure keys, Closure options) {
+		indexExecutor.executeCreate(keys, options)
+	}
+
+	@Override
+	def createIndex(Closure keys) {
+		indexExecutor.executeCreate(keys, {})
+	}
+
+	@Override
+	def dropIndex(String index) {
+		indexExecutor.executeDrop(index)
+	}
+
+	@Override
+	def getIndexes() {
+		indexExecutor.executeFind()
 	}
 	
 }

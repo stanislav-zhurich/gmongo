@@ -7,39 +7,15 @@ import com.mongodb.client.MongoIterable
 import com.stan.gmongo.api.collection.GMongoIterable
 
 
-class GMongoIterableDefault implements GMongoIterable{
-	
-	private final MongoIterable iterable
-	private final Map options = [:]
+class GMongoIterableDefault extends GMongoBaseIterableDefault implements GMongoIterable{
 	
 	GMongoIterableDefault(iterable){
-		this.iterable = iterable
+		super(iterable)
 	}
 	
 	GMongoIterableDefault(iterable, projectionFilter){
 		this(iterable)
 		projection(projectionFilter)
-	}
-
-	@Override
-	<T> void forEach(Closure<T> closure) {
-		iterable.forEach((Block<T>)closure)
-	}
-
-	@Override
-	<T> GMongoIterable map(Closure<T> closure) {
-		new GMongoIterableDefault( iterable.map{closure})
-	}
-
-	@Override
-	<S> S first() {
-		return iterable.first();
-	}
-
-	@Override
-	public <T extends Collection> T into(T target) {
-		 iterable.into(target);
-		 target
 	}
 
 	@Override
@@ -53,13 +29,6 @@ class GMongoIterableDefault implements GMongoIterable{
 	public GMongoIterable skip(Integer skip) {
 		iterable.skip(skip)
 		options << ['skip':skip]
-		this
-	}
-
-	@Override
-	public GMongoIterable maxTime(long maxTime, TimeUnit timeUnit) {
-		iterable.maxTime(maxTime, timeUnit)
-		options << ['maxTime':['maxTime':maxTime, 'timeUnit':timeUnit]]
 		this
 	}
 

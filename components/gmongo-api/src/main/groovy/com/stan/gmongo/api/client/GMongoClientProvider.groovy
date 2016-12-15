@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.stan.gmongo.api.exception.GMongoClientException
-import groovy.lang.Closure;
+import groovy.lang.Closure
+import groovy.transform.ToString;
 import groovy.transform.TypeChecked
 import groovy.util.logging.Slf4j
 
@@ -23,17 +24,16 @@ class GMongoClientProvider {
 		clone.call()
 		
 		builder.with{
-			def _options = options?:[:]
 			def _addresses = addresses?:[new MongoServerAddress()]
 			def _database = database
 			def _authentication = authentication
-			return instantiate(type?:GMongoClientType.DEFAULT, _addresses,
-				 _options, _database, _authentication)
+			return create(type, _addresses,
+				 options, _database, _authentication)
 		}
 	}
 
 	@TypeChecked
-	private static GMongoClient instantiate(GMongoClientType type, List addresses,
+	static GMongoClient create(GMongoClientType type, List addresses,
 		Map options, String database, MongoServerAuthParams auth){
 		
 		log.info("Create connection: addresses ${addresses} options:${options}")
@@ -56,10 +56,11 @@ class GMongoClientProvider {
 	}
 
 
+	@ToString
 	static class MongoClientBuilder{
 		Map options = [:]
 		List addresses = []
-		GMongoClientType type
+		GMongoClientType type = GMongoClientType.DEFAULT
 		String database
 		MongoServerAuthParams authentication
 		
@@ -69,7 +70,7 @@ class GMongoClientProvider {
 		}
 		
 		def type(String type){
-			this.type = GMongoClientType.CUSTOM;
+			this.type = GMongoClientType.CUSTOM
 			this.type.setClassName(type)
 		}
 		
