@@ -1,5 +1,6 @@
 dependencies{
 	compile project(':gmongo-api')
+	compile project(':gmongo-default')
 	compile 'org.slf4j:slf4j-api:1.7.21'	
 	compile 'org.apache.logging.log4j:log4j-api:2.1'
     compile 'org.apache.logging.log4j:log4j-core:2.1'
@@ -9,7 +10,6 @@ dependencies{
 compileGroovy{
 	
 	doLast{
-	println configurations
 	copy {
             from 'src/main/resources/'
             into 'build/resources/'

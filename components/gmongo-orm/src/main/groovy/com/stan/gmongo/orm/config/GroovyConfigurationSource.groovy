@@ -6,7 +6,7 @@ import groovy.util.logging.Slf4j
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ImportCustomizer
 
-import com.stan.gmongo.api.client.GMongoClientProvider.MongoClientBuilder
+import com.stan.gmongo.api.client.MongoClientBuilder
 import com.stan.gmongo.orm.exception.ConfigurationException
 import com.stan.gmongo.orm.exception.NotFoundConfigurationFileException
 
@@ -18,6 +18,12 @@ class GroovyConfigurationSource extends AbstractConfigurationSource {
 	public final static String CONFIG_PATH_PARAM_NAME = "com.stan.gmongo.orm.config_path"
 
 	GMongoConfiguration initialize(Map settings){
+		if(!settings){
+			settings = [:]
+		}
+		if(settings[CONFIG_PATH_PARAM_NAME] == null){
+			settings[CONFIG_PATH_PARAM_NAME] = CONFIG_FILE_NAME
+		}
 		log.info("Reading connections settings from file ${settings[CONFIG_PATH_PARAM_NAME]}")
 		def classloader = Thread.currentThread().getContextClassLoader()
 		URL configUrl = classloader.getResource(settings[CONFIG_PATH_PARAM_NAME])
@@ -49,6 +55,7 @@ class GroovyConfigurationSource extends AbstractConfigurationSource {
 	}
 
 	private MongoClientBuilder evaluateBuilder(Closure config){
+		
 		def builder = new MongoClientBuilder()
 
 		def clone = config.rehydrate(builder, this, this)
@@ -62,7 +69,7 @@ class GroovyConfigurationSource extends AbstractConfigurationSource {
 		def importCustomizer = new ImportCustomizer()
 		importCustomizer.addStarImport 'com.stan.gmongo.api.client.GMongoClientProvider.create'
 		importCustomizer.addImport 'com.stan.gmongo.api.client.GMongoClientType'
-		importCustomizer.addImport 'com.stan.gmongo.api.client.GMongoClientProvider.MongoClientBuilder'
+		importCustomizer.addImport 'com.stan.gmongo.api.client.MongoClientBuilder'
 
 		def configuration = new CompilerConfiguration()
 		configuration.addCompilationCustomizers(importCustomizer)

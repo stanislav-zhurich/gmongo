@@ -10,6 +10,8 @@ import groovy.transform.builder.*
 
 @Canonical
 class GMongoConfiguration {
+	
+	List<String> entityPackages
 
 	List<MongoServerAddress> addresses
 

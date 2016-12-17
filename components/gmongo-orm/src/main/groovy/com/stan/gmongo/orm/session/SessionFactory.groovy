@@ -22,6 +22,7 @@ class SessionFactory {
 		
 		this.session = new SessionContext(client)
 		this.isInitialized = true
+		this
 	}
 	
 	@Synchronized
